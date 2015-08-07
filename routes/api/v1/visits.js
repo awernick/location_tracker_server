@@ -19,15 +19,10 @@ mongoose.connect(process.env.MONGOLAB_URI, function (error) {
 
 // Index
 router.get('/', function(req, res, next) {
-	if (req.accepts('html')) {
-		res.render('index', { title: 'Visits' });
-	}
-	else if(req.accepts('json')) {
-		Visit.find(function(err, visits){
-			if(err) console.log(err)
-	 		else res.status(200).json(visits)
-		})
-	}
+	Visit.find(function(err, visits){
+		if(err) console.log(err)
+ 		else res.status(200).json(visits)
+	})
 })
 
 // Create
