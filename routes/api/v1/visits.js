@@ -34,14 +34,17 @@ router.put('/:id', function(req, res) {
 	console.log('Updating: ' + id)
 
 	Visit.findById(id, function(err, visit) {
-		visit.start_time = req.body.start_time
-		visit.end_time = req.body.end_time
-		visit.open = req.body.open
-		visit.location_id = req.body.location_id
+		if(err) { console.log(err) }
+		else {
+			visit.start_time = req.body.start_time
+			visit.end_time = req.body.end_time
+			visit.open = req.body.open
+			visit.location_id = req.body.location_id
 
-		visit.save(function( err, visit ) {
-			res.status(200).json(visit)
-		});
+			visit.save(function( err, visit ) {
+				res.status(200).json(visit)
+			});
+		}
 	})
 })
 
