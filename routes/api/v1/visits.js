@@ -30,10 +30,13 @@ router.get('/:id', function(req, res, next) {
 
 // Update
 router.put('/:id', function(req, res) {
+	console.log(req.body)
 	var id = req.params.id
 	console.log('Updating: ' + id)
 
 	Visit.findById(id, function(err, visit) {
+		console.log('Performing check')
+		console.log(err)
 		if(err) { console.log(err) }
 		else {
 			visit.start_time = req.body.start_time

@@ -34,7 +34,7 @@ router.put('/:id', function(req, res) {
 
 	Location.findById(id, function(err, location) {
 		location.name = req.body.name
-		location.label = req.body.label
+		location.address = req.body.address
 		location.radius = req.body.radius
 		location.latitude = req.body.latitude
 		location.longitude = req.body.longitude

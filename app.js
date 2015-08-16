@@ -45,9 +45,18 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/visits', api.v1.visits) // Legacy support
 
+// Rewrite API requests
+app.use(function(req, res, next) {
+  req.url = req.url.replace(/\.[^/.]+$/, "")
+  console.log(req.url)
+  // res.redirect(req.url)
+  next()
+})
+
 // API
 app.use('/api/v1/visits', api.v1.visits)
 app.use('/api/v1/locations', api.v1.locations)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

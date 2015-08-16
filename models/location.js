@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 
 var schema = new mongoose.Schema({
 		name				: String,
-		label				: String,
+		address			: String,
 		radius			: Number,
 		latitude		: Number,
 		longitude		: Number
