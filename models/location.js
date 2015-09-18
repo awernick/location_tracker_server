@@ -1,7 +1,8 @@
 var mongoose = require('mongoose')
 
 var schema = new mongoose.Schema({
-		name				: String,
+	  uuid        : String,
+    name				: String,
 		address			: String,
 		radius			: Number,
 		latitude		: Number,

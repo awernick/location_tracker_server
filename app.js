@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/visits', api.v1.visits) // Legacy support
+app.use('/visits', visits);
 
 // Rewrite API requests
 app.use(function(req, res, next) {

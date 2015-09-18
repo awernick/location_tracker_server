@@ -14,30 +14,39 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res){
 	console.log(req.body)
 	var visit = new Visit(req.body)
-	visit.id = visit._id; // Necessary since we have double id
 	visit.save(function (err) {
 		res.status(200).json(visit);
 	})
 })
 
 // Show
-router.get('/:id', function(req, res, next) {
-	var id = req.params.id
-	Visit.findById(id, function(err, visit) {
+router.get('/:uuid', function(req, res, next) {
+	var uuid = req.params.uuid
+	Visit.findOne({"uuid": uuid}, function(err, visit) {
+    if(visit == null) {
+      res.sendStatus(404)
+      res.end()
+      return
+    }
 		res.status(200).json(visit)
 	})
 })
 
 // Update
-router.put('/:id', function(req, res) {
+router.put('/:uuid', function(req, res) {
 	console.log(req.body)
-	var id = req.params.id
-	console.log('Updating: ' + id)
+	var uuid = req.params.uuid
+	console.log('Updating: ' + uuid)
 
-	Visit.findById(id, function(err, visit) {
+	Visit.findOne({"uuid": uuid}, function(err, visit) {
 		console.log('Performing check')
 		console.log(err)
 		if(err) { console.log(err) }
+    if (visit == null) {
+      res.sendStatus(404)
+      res.end()
+      return
+    }
 		else {
 			visit.start_time = req.body.start_time
 			visit.end_time = req.body.end_time
@@ -52,9 +61,14 @@ router.put('/:id', function(req, res) {
 })
 
 // Delete
-router.delete('/:id', function(req, res) {
-	var id = req.params.id
-	Visit.findById(id, function(err, visit){
+router.delete('/:uuid', function(req, res) {
+	var uuid = req.params.uuid
+	Visit.findOne({"uuid": uuid}, function(err, visit){
+    if (visit == null) {
+      res.sendStatus(404)
+      res.end()
+      return
+    }
 		visit.remove(function(err, visit) {
 			res.status(200).json({msg: 'OK'})
 		})

@@ -20,20 +20,30 @@ router.post('/', function(req, res){
 })
 
 // Show
-router.get('/:id', function(req, res, next) {
-	var id = req.params.id
-	Location.findById(id, function(err, location) {
-		res.status(200).json(location)
+router.get('/:uuid', function(req, res, next) {
+	var uuid = req.params.uuid
+	Location.findOne({"uuid": uuid}, function(err, location) {
+    if(location == null) {
+      res.sendStatus(404)
+      res.end()
+      return
+    }
+    res.status(200).json(location)
 	})
 })
 
 // Update
-router.put('/:id', function(req, res) {
-	var id = req.params.id
-	console.log('Updating: ' + id)
+router.put('/:uuid', function(req, res) {
+	var uuid = req.params.uuid
+	console.log('Updating: ' + uuid)
 
-	Location.findById(id, function(err, location) {
-		location.name = req.body.name
+	Location.findOne({"uuid": uuid}, function(err, location) {
+		if (location == null) {
+      res.sendStatus(404)
+      res.end()
+      return // not sure about this...
+    }
+    location.name = req.body.name
 		location.address = req.body.address
 		location.radius = req.body.radius
 		location.latitude = req.body.latitude
@@ -46,9 +56,14 @@ router.put('/:id', function(req, res) {
 })
 
 // Delete
-router.delete('/:id', function(req, res) {
-	var id = req.params.id
-	Location.findById(id, function(err, location){
+router.delete('/:uuid', function(req, res) {
+	var uuid = req.params.uuid
+	Location.findOne({"uuid": uuid}, function(err, location){
+    if(location == null) {
+      res.sendStatus(404)
+      res.end()
+      return
+    }
 		location.remove(function(err, location) {
 			res.status(200).json({msg: 'OK'})
 		})

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose')
 
 var schema = new mongoose.Schema({
-		id       	: String,
+    uuid        : String,
 		start_time	: Date,
-		end_time	: Date,
-		open 		: Boolean,
-		location_id	: String
+		end_time		: Date,
+		open 				: Boolean,
+		_location		: { type: String, ref: 'Location' }
 })
 
 	
