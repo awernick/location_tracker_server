@@ -23,6 +23,8 @@ var api = {
 
 var app = express();
 
+console.log(process.env.MONGOLAB_URI);
+
 // mongodb setup 
 mongoose.connect(process.env.MONGOLAB_URI, function (error) {
   if (error) console.error(error);
