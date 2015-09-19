@@ -23,6 +23,8 @@ set :scm, :git
 # set :pty, true
 
 # Default value for :linked_files is []
+set :linked_files, ["config/secrets.json"]
+
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
 # Default value for linked_dirs is []
@@ -35,6 +37,13 @@ set :scm, :git
 # set :keep_releases, 5
 
 namespace :deploy do
+
+  desc 'Restart PM2 app' 
+  task :restart do
+    invoke 'pm2:restart'
+  end 
+
+  after :publishing, :restart
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
