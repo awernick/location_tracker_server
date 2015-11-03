@@ -4,9 +4,14 @@ var Location = require(__base + 'models/location')
 
 // Index
 router.get('/', function(req, res, next) {
+  console.log('checking')
 	Location.find(function(err, locations){
     console.log('bruh')
-		if(err) console.log(err)
+		if(err) {
+      console.log(err)
+      res.sendStatus(404)
+      res.end()  
+    }
     else res.status(200).json(locations)
   })
 })
