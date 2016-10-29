@@ -33,3 +33,6 @@ class User(db.Model):
                 raise Exception('Password should be greater than or equal to 8 characters')
         else:
             raise Exception('Password and confirmation do not match')
+
+    def as_dict(self):
+               return {c.name: getattr(self, c.name) for c in self.__table__.columns}
