@@ -5,7 +5,12 @@ from .models import User
 # -- users  ---------------------------------------------------------------------
 @app.route('/users/<id>')
 def get_user(id=None):
-    return render_template('index.html', username=username)
+    if id is None:
+        return abort(404)
+
+    user = User.query.filter_by(id=id).first_or_404()
+    return jsonify({"users": [user.as_dict()]}), 200
+
 
 @app.route('/users', methods=['GET'])
 def get_users():
@@ -28,4 +33,10 @@ def create_user():
     except Exception as err:
         return abort(400)
 
+@app.errorhandler(400)
+def bad_request(e):
+    return jsonify(error=400, text=str(e)), 400
 
+@app.errorhandler(404)
+def record_not_found(e):
+    return jsonify(error=404, text=str(e)), 404
