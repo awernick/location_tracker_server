@@ -16,7 +16,7 @@ class User(db.Model):
     def __init__(self, name, email, password, password_confirmation):
         self.name = name
         self.email = email
-        self.__generate_encrypted_password(password, password_confirmation)
+        self.set_encrypted_password(password, password_confirmation)
 
     @validates('email')
     def validate_email(self, key, email):
@@ -25,7 +25,7 @@ class User(db.Model):
         assert email_regex.match(email)
         return email
 
-    def __generate_encrypted_password(self, password, password_confirmation):
+    def set_encrypted_password(self, password, password_confirmation):
         if password == password_confirmation:
             if len(password) > 8:
                 self.encrypted_password = bcrypt.generate_password_hash(password)
