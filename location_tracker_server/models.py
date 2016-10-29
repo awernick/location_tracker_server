@@ -1,6 +1,10 @@
+import re
 from . import db, bcrypt
+from sqlalchemy.orm import validates
 
 class User(db.Model):
+    EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(55))
@@ -13,6 +17,13 @@ class User(db.Model):
         self.name = name
         self.email = email
         self.__generate_encrypted_password(password, password_confirmation)
+
+    @validates('email')
+    def validate_email(self, key, email):
+        assert len(email) >= 3 and len(email) <= 255
+        email_regex = re.compile(self.EMAIL_REGEX)
+        assert email_regex.match(email)
+        return email
 
     def __generate_encrypted_password(self, password, password_confirmation):
         if password == password_confirmation:
