@@ -4,3 +4,5 @@ npm-debug.log
 *.swp
 *.swo
 *.pyc
+venv/
+location_tracker_server/tmp/
