@@ -1,15 +1,21 @@
-from os import path
+from os import path, environ
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+from flask_httpauth import HTTPBasicAuth
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-database_path = path.join(app.root_path, 'tmp', 'development.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(database_path)
+app.config.from_object(environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# -- database ------------------------------------------------------------------
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# -- security ------------------------------------------------------------------
 bcrypt = Bcrypt(app)
+auth = HTTPBasicAuth()
 
 import views
 
