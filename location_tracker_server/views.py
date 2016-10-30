@@ -2,6 +2,7 @@ from flask import g, render_template, abort, request, jsonify
 from . import app, auth, bcrypt, db
 from .models import User
 
+
 # -- users  ---------------------------------------------------------------------
 @app.route('/users/<id>')
 @auth.login_required

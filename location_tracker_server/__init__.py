@@ -15,7 +15,7 @@ migrate = Migrate(app, db)
 
 # -- security ------------------------------------------------------------------
 bcrypt = Bcrypt(app)
-auth = HTTPBasicAuth(scheme='Token')
+auth = HTTPBasicAuth()
 
 import views
 

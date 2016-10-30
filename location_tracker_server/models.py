@@ -1,5 +1,5 @@
 import re
-from . import db, bcrypt
+from . import app, db, bcrypt
 from sqlalchemy.orm import validates
 from itsdangerous import (TimedJSONWebSignatureSerializer
                            as Serializer, BadSignature, SignatureExpired)
