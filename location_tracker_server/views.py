@@ -1,9 +1,10 @@
-from flask import render_template, abort, request, jsonify
-from . import app, db
+from flask import g, render_template, abort, request, jsonify
+from . import app, auth, bcrypt, db
 from .models import User
 
 # -- users  ---------------------------------------------------------------------
 @app.route('/users/<id>')
+@auth.login_required
 def get_user(id=None):
     if id is None:
         return abort(404)
@@ -13,6 +14,7 @@ def get_user(id=None):
 
 
 @app.route('/users', methods=['GET'])
+@auth.login_required
 def get_users():
     users = User.query.all()
     return jsonify({"users": [u.as_dict() for u in users]}), 200
@@ -33,6 +35,27 @@ def create_user():
     except Exception as err:
         return abort(400)
 
+@app.route('/token')
+@auth.login_required
+def get_auth_token():
+    auth_token = g.user.generate_auth_token()
+    return jsonify({'auth_token': auth_token.decode('ascii')}), 200
+
+# -- auth ----------------------------------------------------------------------
+@auth.verify_password
+def verify_password(email_or_token, password):
+    user = User.verify_auth_token(email_or_token)
+
+    # Attempt auth through password if user could not be found
+    if not user:
+        user = User.query.filter_by(email=email_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+
+    g.user = user
+    return True
+
+# -- errors --------------------------------------------------------------------
 @app.errorhandler(400)
 def bad_request(e):
     return jsonify(error=400, text=str(e)), 400
